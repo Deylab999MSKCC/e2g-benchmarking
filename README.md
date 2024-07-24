@@ -17,11 +17,11 @@ The first step is to build E2G "modules" for each model type. The modules are BE
 
 ## Step 2: Clean BED files
 
-One caveat from the previous step is that there may be duplicate/overlapping enhancer regions since the same enhancer may be present in multiple cell lines or for multiple genes. The next step is to sort and merge the enhancer-gene predictions. The maximum value for the score column is taken.
+One caveat from the previous step is that there may be duplicate/overlapping enhancer regions since the same enhancer may be present in multiple cell lines or for multiple genes. The next step is to sort and merge the enhancer-gene predictions. The maximum value for the score column is taken. The columns of the BED files will stay the same.
 
 ## Step 3: Annotate variants
 
-The next step is to determine whether common variants overlap with enhancers from the E2G links.
+The next step is to determine whether common variants overlap with enhancers from the E2G links. The columns of the .annot.gz files are the chromosome, base pair (position), SNP ID, position in centimorgans, and whether the variant overlaps an ENCODE-E2G link (the value transferred here is the score from the E2G modules).
 
 ## Step 4: Overlap E2G predictions with fine-mapped GWAS variants
 
