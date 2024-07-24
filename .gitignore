@@ -1,0 +1,15 @@
+# ignore results, resources (data), and logs
+results/**
+resources/**
+logs/**
+
+# ignore snakemake-created directories
+.snakemake
+.snakemake/**
+
+# ignore error files produced by LSF
+err.*
+out.*
+*.err
+*.out
+

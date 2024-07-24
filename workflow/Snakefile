@@ -1,0 +1,54 @@
+rule build_e2g_modules:
+    input:
+        'resources/gene_scores.txt'
+    conda:
+        'envs/r_e2g.yaml'
+    script:
+        'scripts/build_e2g_modules.R'
+
+rule clean_bedgraphs:
+    conda:
+        'envs/bedtools.yaml'
+    shell:
+        """
+        INPUT_DIR='results/e2g_modules/'
+        SORTED_OUTPUT_DIR='results/sorted_e2g_modules/'
+        MERGED_OUTPUT_DIR='results/merged_e2g_modules/'
+        mkdir -p $SORTED_OUTPUT_DIR
+        mkdir -p $MERGED_OUTPUT_DIR
+        for file in $INPUT_DIR*".bed"; do 
+            output_file=$(basename $file)
+            bedtools sort -i $file > $SORTED_OUTPUT_DIR$output_file
+            bedtools merge -i $SORTED_OUTPUT_DIR$output_file -c 4 -o max > $MERGED_OUTPUT_DIR$output_file
+        done
+        """
+
+
+rule annotate_variants:
+    conda:
+        'envs/variant_annotate.yaml'
+    shell:
+        """
+        INPUT_DIR='results/merged_e2g_modules/'
+        BIMFILE_DIR='resources/BIMS_hg38/'
+        OUTPUT_DIR='results/annotated_variants/'
+        mkdir -p $OUTPUT_DIR
+        for file in $INPUT_DIR*".bed"; do
+            python workflow/scripts/annotate_variants_from_bedgraph.py $file $BIMFILE_DIR $OUTPUT_DIR
+        done
+        """
+
+rule overlap_finemap_variants:
+    conda:
+        'envs/r_e2g.yaml'
+    shell:
+        """
+        INPUT_DIR='results/annotated_variants/'
+        OUTPUT_DIR='results/finemap_variant_overlap/'
+        mkdir -p $OUTPUT_DIR
+        FINEMAP_DIR='resources/finemapped_variant_lists/'
+        for module in $(find $INPUT_DIR -mindepth 1 -type d); do
+            Rscript workflow/scripts/overlap_finemap_variants.R $module $OUTPUT_DIR $FINEMAP_DIR
+        done
+        """
+
