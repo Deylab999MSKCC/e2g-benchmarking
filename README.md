@@ -13,7 +13,11 @@ There are several required input files to run this pipeline. [ADD DATA DOWNLOAD 
 
 ## Step 1: Build E2G "modules"
 
+The first step is to build E2G "modules" for each model type. The modules are BED files with the chromosome, start, and end of the enhancer, and the gene score for the enhancer's target gene. There are separate modules for each tissue. The tissue will determine the cell lines from which enhancer-gene links will be derived. 
+
 ## Step 2: Clean BED files
+
+One caveat from the previous step is that there may be duplicate/overlapping enhancer regions since the same enhancer may be present in multiple cell lines or for multiple genes. The next step is to sort and merge the enhancer-gene predictions. The maximum value for the score column is taken.
 
 ## Step 3: Annotate variants
 
