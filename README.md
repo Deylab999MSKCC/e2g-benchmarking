@@ -25,5 +25,7 @@ The next step is to determine whether common variants overlap with enhancers fro
 
 ## Step 4: Overlap E2G predictions with fine-mapped GWAS variants
 
+This file overlaps lists of fine-mapped GWAS variants for various traits with the E2G predictions. This file computes various enrichment values for whether the E2G predictions are enriched for fine-mapped GWAS variants relative to common variants.
+
 ## Step 5: Compare E2G, PoPS, and E2G + PoPS
 
