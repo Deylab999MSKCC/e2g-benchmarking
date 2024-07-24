@@ -21,6 +21,8 @@ One caveat from the previous step is that there may be duplicate/overlapping enh
 
 ## Step 3: Annotate variants
 
+The next step is to determine whether common variants overlap with enhancers from the E2G links. From here, the scores for each enhancer from the E2G modules are transferred to the individual variants.
+
 ## Step 4: Overlap E2G predictions with fine-mapped GWAS variants
 
 ## Step 5: Compare E2G, PoPS, and E2G + PoPS
