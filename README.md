@@ -25,7 +25,7 @@ The next step is to determine whether common variants overlap with enhancers fro
 
 ## Step 4: Overlap E2G predictions with fine-mapped GWAS variants
 
-This file overlaps lists of fine-mapped GWAS variants for various traits with the E2G predictions. This file computes various enrichment values for whether the E2G predictions are enriched for fine-mapped GWAS variants relative to common variants.
+This file overlaps lists of fine-mapped GWAS variants for various traits with the E2G predictions. This file computes various enrichment values for whether the E2G predictions are enriched for fine-mapped GWAS variants relative to common variants. The output dataframe contains one row for each set of fine-mapped variants that was analyzed. The columns are the point estimate for the enrichment of fine-mapped variants, the standard deviation of the enrichment based on bootstrapping on the chromosomes, the z-score of the enrichment when computing mean and standard deviation using bootstrapping by resampling the fine-mapped variants (permutation test), and corresponding precision and recall values.
 
 ## Step 5: Compare E2G, PoPS, and E2G + PoPS
 
