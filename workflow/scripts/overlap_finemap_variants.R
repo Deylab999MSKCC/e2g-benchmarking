@@ -179,7 +179,7 @@ for(nboot in 1:100){
   recall_bootmat[nboot, ] = (colSums(finemap_var_e2g_overlap[idx, ]) / colSums(finemap_vars[idx, ]))
 }
 
-# compute point estimates for true enrichment, precision, and recall
+# compute point estimates for true enrichment, precision, and recall (per finemap variant set)
 enr = (sum_finemap_var_e2g_overlap/sum_var_e2g_overlaps) / (sum_finemap_vars / num_common_variants)
 precision = (sum_finemap_var_e2g_overlap / sum_var_e2g_overlaps)
 recall = (sum_finemap_var_e2g_overlap / sum_finemap_vars)
@@ -200,7 +200,7 @@ for(mm in 1:100){
   boot_recall[mm, ] = (boot_finemap_var_e2g_overlap[mm, ] / sum_finemap_vars)
 }
 
-# compute z-scores of point estimates for enrichment, precision, and recall?
+# compute p-values for enrichment, precision, and recall using bootstrap (resampling)
 penr = c()
 pprec = c()
 precall = c()

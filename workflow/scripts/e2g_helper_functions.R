@@ -53,12 +53,6 @@ subset_pred_files <- function(pred_files, tissue_name) {
     return (keep_pred_files)
   }
 
-  # keep K562 biosamples if tissue is K562
-  if (tissue_name == 'K562') {
-    keep_pred_files <- pred_files[grep('K562', pred_files)]
-    return (keep_pred_files)
-  }
-
   # keep Mono biosamples if tissue is Mono
   if (tissue_name == 'Mono') {
     keep_pred_files <- pred_files[grep('mono', pred_files)]

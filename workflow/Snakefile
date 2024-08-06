@@ -1,54 +1,96 @@
-rule build_e2g_modules:
-    input:
-        'resources/gene_scores.txt'
-    conda:
-        'envs/r_e2g.yaml'
-    script:
-        'scripts/build_e2g_modules.R'
+configfile: 'config/config_e2g.yaml'
 
-rule clean_bedgraphs:
+CHROMS = range(1, 23)
+
+rule all:
+    input:
+        'results/K562.FINEMAP.RES.txt',
+        'results/GM12878.FINEMAP.RES.txt',
+        'results/pops_benchmarks.txt.prec_recall'
+
+rule merge_enhancers:
+    input:
+        config['e2g_preds']
+    output:
+        'results/merged_enhancers.bed'
     conda:
         'envs/bedtools.yaml'
     shell:
         """
-        INPUT_DIR='results/e2g_modules/'
-        SORTED_OUTPUT_DIR='results/sorted_e2g_modules/'
-        MERGED_OUTPUT_DIR='results/merged_e2g_modules/'
-        mkdir -p $SORTED_OUTPUT_DIR
-        mkdir -p $MERGED_OUTPUT_DIR
-        for file in $INPUT_DIR*".bed"; do 
-            output_file=$(basename $file)
-            bedtools sort -i $file > $SORTED_OUTPUT_DIR$output_file
-            bedtools merge -i $SORTED_OUTPUT_DIR$output_file -c 4 -o max > $MERGED_OUTPUT_DIR$output_file
-        done
+        bedtools sort -i {input} > results/sorted_enhancers.bed
+        bedtools merge -i  results/sorted_enhancers.bed > {output}
         """
-
 
 rule annotate_variants:
+    input:
+        'results/merged_enhancers.bed',
+        'resources/BIMS_hg38/1000G.EUR.QC.{chrom}.bim'
+    output:
+        'results/annotated_variants/annotated_variants.{chrom}.annot.gz'
     conda:
         'envs/variant_annotate.yaml'
-    shell:
-        """
-        INPUT_DIR='results/merged_e2g_modules/'
-        BIMFILE_DIR='resources/BIMS_hg38/'
-        OUTPUT_DIR='results/annotated_variants/'
-        mkdir -p $OUTPUT_DIR
-        for file in $INPUT_DIR*".bed"; do
-            python workflow/scripts/annotate_variants_from_bedgraph.py $file $BIMFILE_DIR $OUTPUT_DIR
-        done
-        """
+    script:
+        'scripts/annotate_variants.py'
 
-rule overlap_finemap_variants:
+K562_FINEMAP_VARS = [
+    'FINEMAP_Ulirsch_ALL_RBC_10', 
+    'FINEMAP_Ulirsch_ALL_RBC_50',
+    'FINEMAP_Ulirsch_ALL_MCH_10', 
+    'FINEMAP_Ulirsch_ALL_MCH_50',
+    'FINEMAP_Ulirsch_ALL_MCV_10',
+    'FINEMAP_Ulirsch_ALL_MCV_50',
+    'FINEMAP_Ulirsch_ALL_Hb_10',
+    'FINEMAP_Ulirsch_ALL_Hb_50',
+    'FINEMAP_Ulirsch_ALL_HbA1c_10',
+    'FINEMAP_Ulirsch_ALL_HbA1c_50',
+    'FINEMAP_Omer_blood_RBC_DISTRIB_WIDTH_10',
+    'FINEMAP_Omer_blood_RBC_DISTRIB_WIDTH_50'
+]
+
+rule overlap_finemap_variants_k562:
+    input:
+        expand('results/annotated_variants/annotated_variants.{chrom}.annot.gz', chrom=CHROMS),
+        expand('resources/finemapped_variant_lists/{name}', name=K562_FINEMAP_VARS)
+    output:
+        'results/K562.FINEMAP.RES.txt'
     conda:
         'envs/r_e2g.yaml'
-    shell:
-        """
-        INPUT_DIR='results/annotated_variants/'
-        OUTPUT_DIR='results/finemap_variant_overlap/'
-        mkdir -p $OUTPUT_DIR
-        FINEMAP_DIR='resources/finemapped_variant_lists/'
-        for module in $(find $INPUT_DIR -mindepth 1 -type d); do
-            Rscript workflow/scripts/overlap_finemap_variants.R $module $OUTPUT_DIR $FINEMAP_DIR
-        done
-        """
+    script:
+        'scripts/overlap_finemap_variants_K562.R'
 
+GM12878_FINEMAP_VARS = [
+    'FINEMAP_Ulirsch_ALL_WBC_10',
+    'FINEMAP_Ulirsch_ALL_WBC_50',
+    'FINEMAP_Ulirsch_ALL_Mono_10',
+    'FINEMAP_Ulirsch_ALL_Mono_50',
+    'FINEMAP_Ulirsch_ALL_Lym_10',
+    'FINEMAP_Ulirsch_ALL_Lym_50',
+    'FINEMAP_Ulirsch_ALL_Eosino_10',
+    'FINEMAP_Ulirsch_ALL_Eosino_50',
+    'FINEMAP_Ulirsch_ALL_AID_Combined_10',
+    'FINEMAP_Ulirsch_ALL_AID_Combined_50',
+    'FINEMAP_Ulirsch_ALL_IBD_10',
+    'FINEMAP_Ulirsch_ALL_IBD_50'
+]
+
+rule overlap_finemap_variants_gm12878:
+    input:
+        expand('results/annotated_variants/annotated_variants.{chrom}.annot.gz', chrom=CHROMS),
+        expand('resources/finemapped_variant_lists/{name}', name=GM12878_FINEMAP_VARS)
+    output:
+        'results/GM12878.FINEMAP.RES.txt'
+    conda:
+        'envs/r_e2g.yaml'
+    script:
+        'scripts/overlap_finemap_variants_GM12878.R'
+
+
+rule benchmark_pops:
+    input:
+        config['e2g_preds']
+    output:
+        'results/pops_benchmarks.txt.prec_recall'
+    conda:
+        'envs/pops.yaml'
+    script:
+        'scripts/run_pops_benchmark.R'

@@ -1,6 +1,9 @@
-genescore_path: /data/deyk/karthik/e2g_benchmarking/resources/gene_scores.txt
-bed_dir: /data/deyk/karthik/e2g_benchmarking/results/bedfiles/
-tissue: 'K562' # can be a single value from the following: c("ALL", "BLD", "BRN", "K562", "GM12878", "Mono")
+e2g_preds: /data/deyk/karthik/e2g_benchmarking/resources/test_ENCODE_E2G_DNase_only_K562.bed
+
+
+# genescore_path: /data/deyk/karthik/e2g_benchmarking/resources/gene_scores.txt
+# bed_dir: /data/deyk/karthik/e2g_benchmarking/results/bedfiles/
+# tissue: 'K562' # can be a single value from the following: c("ALL", "BLD", "BRN", "K562", "GM12878", "Mono")
 
 
 

@@ -13,3 +13,7 @@ out.*
 *.err
 *.out
 
+# ignore .RData and .Rhistory files
+.RData
+.Rhistory 
+
