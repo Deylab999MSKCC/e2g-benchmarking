@@ -7,31 +7,3 @@ There are two benchmarking methods:
 2. Using E2G predictions to link GWAS credible sets to causal genes
 
 This README will explain the steps required to run this benchmarking pipeline.
-
-## Setup
-
-There are several required input files to run this pipeline. [ADD DATA DOWNLOAD SCRIPT ONCE DATA IS AVAILABLE]
-
-1. Gene scores: [INSERT DESCRIPTION OF GENE SCORES HERE]. These scores file needs to be downloaded to `resources/`. [INSERT A LOCATION TO DOWNLOAD GENE SCORES]
-2. E2G predictions: There are six types of E2G predictions that are benchmarked (ABC_DNase_only, ABC_ext, ENCODE_E2G_DNase_HiC, ENCODE_E2G_DNase_only, ENCODE_E2G_ext, scE2G). Each of these models requires a subfolder within the `resources/` folder. For ABC_DNase_only, ENCODE_E2G_DNase_HiC, and ENCODE_E2G_DNase_only, the predictions for each file need to be placed in a subfolder called `thresholded_predictions`. One example path for these files would be: `resources/ABC_DNase_only/thresholded_predictions`. [INSERT INSTRUCTIONS FOR OTHER FILES LATER]
-3. Common variants: These are common variants for each chromosome from the 1000 Genomes Project. These files need to be downloaded to `resources/BIMS_hg38`.
-4. Finemapped variants: These are lists of fine-mapped variants per trait at different PIP thresholds. These files need to be downloaded to `resources/finemapped_variant_lists`.
-
-## Step 1: Build E2G "modules"
-
-The first step is to build E2G "modules" for each model type. The modules are BED files with the chromosome, start, and end of the enhancer, and the gene score for the enhancer's target gene. There are separate modules for each tissue. The tissue will determine the cell lines from which enhancer-gene links will be derived. The score here appears to simply be a 1 indicating that the gene should be included in downstream analysis.
-
-## Step 2: Clean BED files
-
-One caveat from the previous step is that there may be duplicate/overlapping enhancer regions since the same enhancer may be present in multiple cell lines or for multiple genes. The next step is to sort and merge the enhancer-gene predictions. The maximum value for the score column is taken. The columns of the BED files will stay the same.
-
-## Step 3: Annotate variants
-
-The next step is to determine whether common variants overlap with enhancers from the E2G links. The columns of the .annot.gz files are the chromosome, base pair (position), SNP ID, position in centimorgans, and whether the variant overlaps an ENCODE-E2G link (the value transferred here is the score from the E2G modules).
-
-## Step 4: Overlap E2G predictions with fine-mapped GWAS variants
-
-This file overlaps lists of fine-mapped GWAS variants for various traits with the E2G predictions. This file computes various enrichment values for whether the E2G predictions are enriched for fine-mapped GWAS variants relative to common variants. The output dataframe contains one row for each set of fine-mapped variants that was analyzed. The columns are the point estimate for the enrichment of fine-mapped variants, the standard deviation of the enrichment based on bootstrapping on the chromosomes, the p-value of the enrichment when computing mean and standard deviation using bootstrapping by resampling the fine-mapped variants (permutation test), and corresponding precision and recall values.
-
-## Step 5: Compare E2G, PoPS, and E2G + PoPS
-
