@@ -35,7 +35,7 @@ The next step is to compute enrichment, precision, and recall values for the pre
 2. Precision: (# finemapped variants overlapping enhancers / # common variants overlapping enhancers). In other words, what fraction of the variants overlapping enhancers are also finemapped for a GWAS trait?
 3. Recall: (# finemapped variants overlapping enhancers / # finemapped variants). In other words, what fraction of finemapped variants are recovered by the enhancer annotations?
 
-This can be done for different sets of traits. In this pipeline, we have currently implemented this for K562-related traits (red blood cell-related traits) and GM1287-related traits (white blood cell-related). For each of these, there are different lists of finemapped variants per trait, and the enrichment, precision, and recall are computed on the level of each list. For each value, standard deviations are computed by performing 100 bootstrap iterations, bootstrapping across chromosomes.
+This can be done for different sets of traits. In this pipeline, we have currently implemented this for K562-related traits (red blood cell-related traits) and GM1287-related traits (white blood cell-related). For each of these, there are different lists of finemapped variants per trait, and the enrichment, precision, and recall are computed on the level of each list. For each value, standard deviations are computed by performing 100 bootstrap iterations, bootstrapping across chromosomes. P-values for each are computed by using permutation testing, shuffling the overlaps between common variants and enhancer regions. The 100 permutations are used to compute a normal null distribution, from which p-values are computed.
 
 
 
