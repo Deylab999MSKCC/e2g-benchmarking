@@ -4,9 +4,10 @@ CHROMS = range(1, 23)
 
 rule all:
     input:
-        'results/K562.FINEMAP.RES.txt',
-        'results/GM12878.FINEMAP.RES.txt',
-        'results/pops_benchmarks.txt.prec_recall'
+        expand('results/annotated_variants/annotated_variants.{chrom}.annot.gz', chrom=CHROMS)
+        # 'results/K562.FINEMAP.RES.txt',
+        # 'results/GM12878.FINEMAP.RES.txt',
+        # 'results/pops_benchmarks.txt.prec_recall'
 
 rule merge_enhancers:
     input:
