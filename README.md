@@ -45,7 +45,7 @@ Another way to benchmark enhancer-gene predictions using GWAS is to benchmark ho
 
 ## Step 1: Download ENCODE-rE2G data from Synapse.
 
-All of the enhancer-gene predictions from various methods are avaiable on [Synapse](https://www.synapse.org/Synapse:syn52234275/files/) using the link provided in the paper. First, this data needs to be downloaded from Synapse to the `resources/` folder.
+All of the enhancer-gene predictions from various methods are avaiable on [Synapse](https://www.synapse.org/Synapse:syn52234275/files/) using the link provided in the paper. First, this data needs to be downloaded from Synapse to the `resources/` folder. (warning: the entire data for this is ~76GB).
 
 ## Step 2:
 
