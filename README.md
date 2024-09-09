@@ -23,7 +23,12 @@ For overlapping fine-mapped GWAS variants with predicted enhancers, we are only 
 First, we sort the enhancer regions by genomic position. Then, since there may be overlapping enhancer regions (ie: a region linked to 2 genes, two slightly 
 offset regions from different biosamples, etc.), we merge overlapping enhancer regions together.
 
-## Step 3: 
+## Step 3: Annotate common variants overlapping enhancers
+
+The next step is to take every common variant in hg38 (from the 1000 Genomes Project), and mark whether that variant overlaps a predicted enhancer region.
+For runtime, this is done separately for each chromosome.
+
+## Step 4: 
 
 
 
