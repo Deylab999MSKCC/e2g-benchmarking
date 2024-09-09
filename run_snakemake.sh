@@ -10,7 +10,7 @@ source $HOME/.bashrc
 mamba activate snakemake
 
 # run snakemake for whole pipeline (ending with volcano plot)
-snakemake --use-conda --jobs 32 --cluster 'bsub -W 6:00 -n 1 -R "rusage[mem=32G]" -o out.%J.txt -e err.%J.txt' all
+snakemake --use-conda --jobs 32 --cluster 'bsub -W 6:00 -n 1 -R "rusage[mem=32G]" -o out.%J.txt -e err.%J.txt' overlap_finemap_variants_gm12878
 
 # Random comments pertaining to various components of the job submission.
 # .%J adds job ID number to output files

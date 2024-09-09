@@ -95,3 +95,13 @@ rule benchmark_pops:
         'envs/pops.yaml'
     script:
         'scripts/run_pops_benchmark.R'
+
+
+# rule build_e2g_modules:
+#     input:
+
+#     output:
+#     conda:
+#         'envs/r_e2g.yaml'
+#     script:
+#         'scripts/build_e2g_modules.R'
