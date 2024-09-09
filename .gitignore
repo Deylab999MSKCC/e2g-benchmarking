@@ -1,6 +1,5 @@
 # ignore results, resources (data), and logs
 results/**
-resources/**
 logs/**
 
 # ignore snakemake-created directories
