@@ -28,7 +28,16 @@ offset regions from different biosamples, etc.), we merge overlapping enhancer r
 The next step is to take every common variant in hg38 (from the 1000 Genomes Project), and mark whether that variant overlaps a predicted enhancer region.
 For runtime, this is done separately for each chromosome.
 
-## Step 4: 
+## Step 4: Compute enrichment, precision, and recall of finemapped variants within enhancer regions.
+
+The next step is to compute enrichment, precision, and recall values for the presence of fine-mapped variants within enhancer regions. The definitions are as follows:
+1. Enrichment: (# finemapped variants overlapping enhancers / # common variants overlapping enhancers) / (# finemapped variants / # common variants). In other words, do the enhancer annotations contain a greater proportion of finemapped variants than the genome?
+2. Precision: (# finemapped variants overlapping enhancers / # common variants overlapping enhancers). In other words, what fraction of the variants overlapping enhancers are also finemapped for a GWAS trait?
+3. Recall: (# finemapped variants overlapping enhancers / # finemapped variants). In other words, what fraction of finemapped variants are recovered by the enhancer annotations?
+
+This can be done for different sets of traits. In this pipeline, we have currently implemented this for K562-related traits (red blood cell-related traits) and GM1287-related traits (white blood cell-related). For each of these, there are different lists of finemapped variants per trait, and the enrichment, precision, and recall are computed on the level of each list. For each value, standard deviations are computed by performing 100 bootstrap iterations, bootstrapping across chromosomes. P-values for each are computed by using permutation testing, shuffling the overlaps between common variants and enhancer regions. The 100 permutations are used to compute a normal null distribution, from which p-values are computed.
+
+
 
 
 
