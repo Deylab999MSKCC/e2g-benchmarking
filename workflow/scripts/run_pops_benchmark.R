@@ -4,7 +4,7 @@ library(data.table)
 
 # configurable parameters
 tissue <- 'ALL'
-use_pops <- TRUE
+use_pops <- FALSE
 num_pops <- 2
 num_eg_genes <- 1
 
@@ -128,6 +128,8 @@ for (i in 1:length(unique_credible_sets)) {
 
     if (length(cred_set_eg_overlaps) > 0) {
 
+        print(i)
+
         # get e2g preds genes and scores that overlap credible set variants
         cred_set_e2g_preds = e2g_preds[unique(subjectHits(cred_set_eg_overlaps)), c("TargetGene", "Score")]
 
@@ -135,7 +137,7 @@ for (i in 1:length(unique_credible_sets)) {
         cred_set_e2g_gene_scores = tapply(cred_set_e2g_preds$Score, cred_set_e2g_preds$TargetGene, max)
 
         # get gene scores for each gene in PoPS cred set-gene pairs
-        pops_cred_set_gene_scores = rep(0, length(pops_cred_set_gene_pairs$TargetGene))
+        pops_cred_set_gene_scores = rep(0, length(pops_cred_set_gene_pairs$TargetGene)) # all possible genes the credible set is evaluated against? what are the rows on the PoPS table?
         names(pops_cred_set_gene_scores) = pops_cred_set_gene_pairs$TargetGene
         pops_cred_set_gene_scores[match(intersect(names(cred_set_e2g_gene_scores), pops_cred_set_gene_pairs$TargetGene), pops_cred_set_gene_pairs$TargetGene)] = cred_set_e2g_gene_scores[match(intersect(names(cred_set_e2g_gene_scores), pops_cred_set_gene_pairs$TargetGene), names(cred_set_e2g_gene_scores))]
 
@@ -158,11 +160,19 @@ for (i in 1:length(unique_credible_sets)) {
             true_positives = c(true_positives, length(intersect(cred_set_pred_genes, cred_set_causal_genes)))
             positives = c(positives, length(cred_set_pred_genes))
         }
-
-        # record numbers of causal genes per credible set
-        causals = c(causals, length(cred_set_causal_genes))
     }
+    else {
+        true_positives <- c(true_positives, 0)
+        positives <- c(positives, 0)
+    }
+
+    # record numbers of causal genes per credible set
+    causals = c(causals, length(cred_set_causal_genes))
 }
+
+print(true_positives)
+print(positives)
+print(causals)
 
 # compute precision and recall of true causal genes
 precision_length = sum(true_positives[which(positives !=  0)]) / length(positives[which(positives !=  0)])
