@@ -8,6 +8,14 @@ There are two benchmarking methods:
 
 This README will explain the steps required to run this benchmarking pipeline.
 
+## Quick Start
+
+To run the pipeline, first clone the repository. Then, in the config/config_e2g.yaml file, specify the path to your E2G predictions. The file should contain 5 columns: chrom, start, end, gene, and score. The pipeline requires snakemake and conda. Once set up, all the required GWAS data files should also be downloaded through GitHub. The pipeline can be run using the following command:
+
+`snakemake --use-conda all`
+
+Note: it might be quite slow to run on just 1 core, so it would be good to parallelize it based on your cluster settings.
+
 ## Step 1: Prepare input enhancer-gene prediction file
 
 As input, this pipeline takes enhancer-gene predictions generated from your method of choice. The required input file is a BED file containing the following columns: 
@@ -41,7 +49,7 @@ This can be done for different sets of traits. In this pipeline, we have current
 
 Another way to benchmark enhancer-gene predictions using GWAS is to benchmark how well enhancer-gene predictions can link GWAS credible sets to their target genes. In the ENCODE-E2G paper, one approach presented to do this is to intersect predictions from the ENCODE-rE2G enhancer-gene model with PoPS scores. PoPS scores specify whether a gene is likely to be relevant for a disease. One way to link credible sets to genes with PoPS would then be to take the gene with the highest PoPS score in the vicinity (within 2 MB) of a credible set. Here, be default, we use an approach that intersects the top E2G gene with the top 2 PoPS genes to establish credible set-gene links. We then compute the precision and recall against a silver-standard dataset curated by the ENCODE consortium (see ENCODE-rE2G paper).
 
-# To reproduce ENCODE-rE2G GWAS Benchmarking
+# To reproduce ENCODE-rE2G GWAS Benchmarking (WORK IN PROGRESS)
 
 ## Step 1: Download ENCODE-rE2G data from Synapse.
 
