@@ -5,8 +5,8 @@ CHROMS = range(1, 23)
 rule all:
     input:
         'results/pops_benchmarks.txt.prec_recall'
-        # 'results/K562.FINEMAP.RES.txt',
-        # 'results/GM12878.FINEMAP.RES.txt'
+        'results/K562.FINEMAP.RES.txt',
+        'results/GM12878.FINEMAP.RES.txt'
 
 rule merge_enhancers:
     input:
