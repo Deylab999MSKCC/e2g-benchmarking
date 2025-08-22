@@ -1,1 +1,2 @@
-e2g_preds: /data1/deyk/karthik/e2g-coloc-benchmarks/data/igvf_k562_multiome_predictions/K562_ERR9847049_Multiome.K562.FigR.e2g.tsv.gz
+e2g_preds: /data1/deyk/karthik/e2g-coloc-benchmarks/data/igvf_k562_multiome_predictions/K562_ERR9847049_Multiome_K562_SCENT.e2g.tsv.gz
+score_type: 'low_better'

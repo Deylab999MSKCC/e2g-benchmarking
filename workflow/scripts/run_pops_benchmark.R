@@ -88,9 +88,9 @@ for (i in 1:length(unique_credible_sets)) {
     # get causal genes from the credible set
     cred_set_causal_genes = pops_cred_set_gene_pairs$TargetGene[which(pops_cred_set_gene_pairs$truth == 1)]
 
-    if (length(cred_set_causal_genes) > 1) {
-        print(i)
-    }
+    # if (length(cred_set_causal_genes) > 1) {
+    #     print(i)
+    # }
 
     # get unique diseases from the credible set
     disease_names = unique(pops_cred_set_gene_pairs$Disease)
@@ -141,7 +141,7 @@ for (i in 1:length(unique_credible_sets)) {
 
     if (length(cred_set_eg_overlaps) > 0) {
 
-        # print(i)
+        print(i)
 
         # get e2g preds genes and scores that overlap credible set variants
         cred_set_e2g_preds = e2g_preds[unique(subjectHits(cred_set_eg_overlaps)), c("TargetGene", "Score")]
@@ -149,13 +149,20 @@ for (i in 1:length(unique_credible_sets)) {
         # take maximum score per gene
         cred_set_e2g_gene_scores = tapply(cred_set_e2g_preds$Score, cred_set_e2g_preds$TargetGene, max)
 
+        # take minimum score per gene if score type is 'low_better' (lower score is better)
+        score_type <- snakemake@params[['score_type']]
+        # score_type <- 'low_better'
+        if (score_type == 'low_better') {
+            cred_set_e2g_gene_scores = tapply(cred_set_e2g_preds$Score, cred_set_e2g_preds$TargetGene, min)
+        }
+
         # get gene scores for each gene in PoPS cred set-gene pairs
-        pops_cred_set_gene_scores = rep(0, length(pops_cred_set_gene_pairs$TargetGene)) # all possible genes the credible set is evaluated against? what are the rows on the PoPS table?
+        pops_cred_set_gene_scores = rep(NA, length(pops_cred_set_gene_pairs$TargetGene)) # all possible genes the credible set is evaluated against? what are the rows on the PoPS table?
         names(pops_cred_set_gene_scores) = pops_cred_set_gene_pairs$TargetGene
         pops_cred_set_gene_scores[match(intersect(names(cred_set_e2g_gene_scores), pops_cred_set_gene_pairs$TargetGene), pops_cred_set_gene_pairs$TargetGene)] = cred_set_e2g_gene_scores[match(intersect(names(cred_set_e2g_gene_scores), pops_cred_set_gene_pairs$TargetGene), names(cred_set_e2g_gene_scores))]
 
-        # if there are no genes implicated by E2G linking scores
-        if (max(pops_cred_set_gene_scores) == 0) {
+        # if there are no genes implicated by E2G linking scores (this might have ramifications for some of the divergent scores)
+        if (all(is.na(pops_cred_set_gene_scores))) {
             true_positives = c(true_positives, 0)
             positives = c(positives, 0)
         } 
@@ -163,6 +170,11 @@ for (i in 1:length(unique_credible_sets)) {
 
             # determine top N genes implicated by E2G scores
             cred_set_pred_genes = names(pops_cred_set_gene_scores)[order(pops_cred_set_gene_scores, decreasing = T)[1:pmin(num_eg_genes, length(pops_cred_set_gene_scores))]]
+
+            # if score type is low_better
+            if (score_type == 'low_better') {
+                cred_set_pred_genes = names(pops_cred_set_gene_scores)[order(pops_cred_set_gene_scores, decreasing = F)[1:pmin(num_eg_genes, length(pops_cred_set_gene_scores))]]
+            }
 
             # intersect with PoPS (if specified)
             if (use_pops) {

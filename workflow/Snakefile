@@ -90,6 +90,8 @@ rule benchmark_pops:
         config['e2g_preds']
     output:
         'results/pops_benchmarks.txt.prec_recall'
+    params:
+        score_type = config['score_type']
     conda:
         'envs/pops.yaml'
     script:
