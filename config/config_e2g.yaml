@@ -1,1 +1,1 @@
-e2g_preds: resources/test_ENCODE_E2G_DNase_only_K562.bed
+e2g_preds: /data1/deyk/karthik/e2g-coloc-benchmarks/data/igvf_k562_multiome_predictions/K562_ERR9847049_Multiome.K562.FigR.e2g.tsv.gz

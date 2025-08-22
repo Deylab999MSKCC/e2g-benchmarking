@@ -7,4 +7,5 @@ dependencies:
   - bioconductor-genomicranges
   - r-dplyr
   - r-data.table
+  - r-r.utils
 prefix: /data/deyk/karthik/mambaforge/envs/pops

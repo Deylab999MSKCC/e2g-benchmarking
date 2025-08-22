@@ -5,9 +5,9 @@
 #BSUB -o e2g_benchmark.out   # Output file name
 #BSUB -e e2g_benchmark.err   # Error file name
 
-# activate snakemake mamba environment
+# activate snakemake conda environment
 source $HOME/.bashrc
-mamba activate snakemake
+conda activate snakemake
 
 # run snakemake for whole pipeline (ending with volcano plot)
 snakemake --use-conda --jobs 32 --cluster 'bsub -W 6:00 -n 1 -R "rusage[mem=32G]" -o out.%J.txt -e err.%J.txt' all

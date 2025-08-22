@@ -10,6 +10,15 @@ num_eg_genes <- 1
 
 # read in enhancer-gene links
 e2g_preds <- data.frame(fread(snakemake@input[[1]]))
+
+# retrieve necessary columns for the benchmark (matching IGVF format)
+e2g_preds <- e2g_preds[, c(
+    'ElementChr',
+    'ElementStart',
+    'ElementEnd',
+    'GeneSymbol',
+    'Score'
+)]
 colnames(e2g_preds) <- c('chr', 'start', 'end', 'TargetGene', 'Score')
 
 # create lists of credible set variants per trait
@@ -79,6 +88,10 @@ for (i in 1:length(unique_credible_sets)) {
     # get causal genes from the credible set
     cred_set_causal_genes = pops_cred_set_gene_pairs$TargetGene[which(pops_cred_set_gene_pairs$truth == 1)]
 
+    if (length(cred_set_causal_genes) > 1) {
+        print(i)
+    }
+
     # get unique diseases from the credible set
     disease_names = unique(pops_cred_set_gene_pairs$Disease)
 
@@ -128,7 +141,7 @@ for (i in 1:length(unique_credible_sets)) {
 
     if (length(cred_set_eg_overlaps) > 0) {
 
-        print(i)
+        # print(i)
 
         # get e2g preds genes and scores that overlap credible set variants
         cred_set_e2g_preds = e2g_preds[unique(subjectHits(cred_set_eg_overlaps)), c("TargetGene", "Score")]
